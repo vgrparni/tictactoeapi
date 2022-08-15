@@ -1,0 +1,103 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:2222
+    description: Generated server url
+paths:
+  /tictactoe-api/startNewGame:
+    post:
+      tags:
+        - tic-tac-toe-controller
+      operationId: startNewGame
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewGameInfo'
+  /tictactoe-api/playerTurn:
+    patch:
+      tags:
+        - tic-tac-toe-controller
+      operationId: playerTurn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TurnRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TurnResponse'
+  /tictactoe-api/stateOfGameBoard:
+    get:
+      tags:
+        - tic-tac-toe-controller
+      operationId: getStateOfGameBoard
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /tictactoe-api/playersInfo:
+    get:
+      tags:
+        - tic-tac-toe-controller
+      operationId: getPlayersInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+components:
+  schemas:
+    NewGameInfo:
+      type: object
+      properties:
+        message:
+          type: string
+        board:
+          type: object
+          additionalProperties:
+            type: string
+    TurnRequest:
+      type: object
+      properties:
+        playerId:
+          type: string
+        position:
+          type: integer
+          format: int32
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+    TurnResponse:
+      type: object
+      properties:
+        gameOver:
+          type: boolean
+        winner:
+          $ref: '#/components/schemas/Player'
+        state:
+          type: object
+          additionalProperties:
+            type: string
